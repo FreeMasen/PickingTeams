@@ -13,12 +13,12 @@ namespace PickingTeams
     public partial class frmPickingTeams : Form
     {
         //list to store enteries
-        List<string> names;
+        List<Player> players = new List<Player>();
+        List<String> sorted = new List<string>();
 
         public frmPickingTeams()
         {
             InitializeComponent();
-            names = new List<string>();
         }
 
         private void btnAddName_Click(object sender, EventArgs e)
@@ -27,8 +27,7 @@ namespace PickingTeams
             if (txtName.Text.Length > 0 )
             {
                 //if not empty add name to list
-                names.Add(txtName.Text);
-                updateView();
+                players.Add(new Player(txtName.Text));
 
             }
             else
@@ -36,71 +35,85 @@ namespace PickingTeams
                 //otherwise show error
                 MessageBox.Show("Please enter a name or make your teams");
             }
-            //focus back on txtbox
+            //focus back on txtbox and clear the field
             txtName.Focus();
+            txtName.Text = "";
+
+            //clear the datasource and reload the updated list
+            lstNames.DataSource = null;
+            lstNames.DataSource = players;
+
             //make the second button clickable
             btnMakeGroups.Enabled = true;
         }
 
         
 
-        private void updateView()
-        {
-            //clear the listbox and update it with our new player
-            lstNames.Items.Clear();
-            foreach (string player in names)
-            {
-                lstNames.Items.Add(player);
-            }
-        }
 
         
         private void btnMakeGroups_Click(object sender, EventArgs e)
         {
-            //check the team size is not empty
-            if (txtTeamSize.Text.Length > 0)
+            //sort the players list by the index
+            players.Sort((p1, p2) => p1.index.CompareTo(p2.index));
+            //make sure the sorted list is empty
+            sorted.Clear();
+
+            //store a counter that will pull the player by index
+            int counter = 0;
+            //determine the number of teams
+            decimal numOfTeams = (players.Count/numTeamSize.Value);
+
+            for (int i = 1; i <= numOfTeams; i++)
             {
-                //store the team size
-                int teamSize = Convert.ToInt16(txtTeamSize.Text);
-                //initate the team counter
-                int teamNum = 1;
-                //start our random
-                Random rng = new Random();
-                //create a new list for sorted teams
-                List<string> teams = new List<string>();
-                //store a second counter
-                int counter = 0;
-                //perform while our list is not empty
-                while (names.Count > 0)
+                //first add a team name to the list
+                sorted.Add("Team " + (i ).ToString());
+                for (int x = 0; x < numTeamSize.Value; x++)
                 {
-                    //check if our counter and our team size are equal
-                    if (counter % teamSize == 0)
+                    //then add the number of players determined by the user entry
+                    if (counter < players.Count())
                     {
-                        //add the team name to our list
-                        teams.Add("Team" + teamNum.ToString());
-                        teamNum++;
+                        sorted.Add(players[counter].name);
+                        counter++;
                     }
-                    //generate random
-                    int n = rng.Next(names.Count);
-                    //add the player at our random position to our new list
-                    teams.Add(names[n]);
-                    //remove this player from old list
-                    names.RemoveAt(n);
-                    //
-                    counter++;
                 }
-                //set our new list to our old list
-                names = teams;
-                //run update view
-                updateView();
-                //make the second button no longer clickable
-                btnMakeGroups.Enabled = false;
             }
-            else
-            {
-                MessageBox.Show("Please enter a team size");
-                txtTeamSize.Focus();
-            }
+
+            //set the listbox source to the new list
+            lstNames.DataSource = sorted;
+
+            
+
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            //clear all lists and the listbox
+            players.Clear();
+            sorted.Clear();
+            lstNames.DataSource = null;
+        }
+        
+
+    }
+
+    //class to define the elementsa that a player would have 
+    //as well as a tostring override
+    public class Player
+    {
+        
+        public string name { get; set; }
+        public int index { get; set; }
+        static Random rng = new Random();
+
+        public Player(string name)
+        {
+            this.name = name;
+            this.index = rng.Next();
+        }
+
+        public override string ToString()
+        {
+            return this.name;
         }
     }
 }
