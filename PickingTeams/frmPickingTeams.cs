@@ -113,7 +113,7 @@ namespace PickingTeams
 
         public override string ToString()
         {
-            return this.name;
+            return string.Format("{0} {1}",this.index, this.name);
         }
     }
 }

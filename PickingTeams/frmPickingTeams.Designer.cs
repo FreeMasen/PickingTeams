@@ -43,7 +43,7 @@
             // 
             this.txtName.Location = new System.Drawing.Point(12, 40);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(161, 20);
+            this.txtName.Size = new System.Drawing.Size(190, 20);
             this.txtName.TabIndex = 0;
             // 
             // label1
@@ -65,7 +65,7 @@
             // 
             // btnAddName
             // 
-            this.btnAddName.Location = new System.Drawing.Point(179, 37);
+            this.btnAddName.Location = new System.Drawing.Point(208, 37);
             this.btnAddName.Name = "btnAddName";
             this.btnAddName.Size = new System.Drawing.Size(75, 23);
             this.btnAddName.TabIndex = 3;
@@ -112,6 +112,7 @@
             // 
             // btnClear
             // 
+            this.btnClear.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnClear.Location = new System.Drawing.Point(197, 278);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(84, 23);
@@ -122,6 +123,7 @@
             // 
             // frmPickingTeams
             // 
+            this.AcceptButton = this.btnAddName;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
